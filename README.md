@@ -1,12 +1,10 @@
 # FreeModel
 
+[Try FreeModel 🡪](https://freemodel.dev/invite/FRE-0f2ca762)
+
 Frontier AI, free for a month when you verify.
 
 Sign up, verify your new account, and get one month of Pro free. Access the latest models through one simple, OpenAI-compatible API.
-
-### My Invite Link
-
-[Try FreeModel →](https://freemodel.dev/invite/FRE-0f2ca762)
 
 ### One Month of Pro, Free
 
@@ -14,11 +12,31 @@ Verify your new account and get a full month of Pro at no cost — no payment in
 
 ### Frontier Models
 
-Access the latest models through one clean, simple API endpoint.
+Access the latest models such as Opus 4.8 and GPT 5.5 through one clean, simple API endpoint.
 
 ### OpenAI Compatible
 
 A drop-in replacement for the OpenAI API that works with OpenAI-compatible SDKs and tools.
+
+## How can I get more usage?
+
+### Invite friends and earn $10 each
+
+Share your referral link with friends. When someone signs up and verifies their account, you both receive $10 in API credits.
+
+There is no referral cap, and the credits never expire. Signup and referral credits are applied automatically before your plan credits.
+
+### Buy additional credits
+
+You can also purchase extra API credits, which are applied automatically to every request.
+
+The minimum top-up is **30 credits**, equivalent to **$1 USD**. You can purchase up to **$1,000 worth of credits**.
+
+Supported payment methods:
+
+* Alipay
+* Apple Pay
+* Cryptocurrency
 
 ## How is it so cheap?
 It's an API proxy station. If you haven't heard yet, these posts explain it well:
@@ -31,8 +49,84 @@ It's an API proxy station. If you haven't heard yet, these posts explain it well
 
 [China Is Scamming OpenAI?! (GPT-5 for $1)](https://www.youtube.com/watch?v=XoB4DXV7pUw)
 
+## How do I know it won't secretly swap me to a cheaper model?
+
+**Join the community**
+
+[![Telegram](https://img.shields.io/badge/Join-Telegram-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/+LxD6RVuT2ZkyYWVh)
+
+**Test it yourself.** It's free. Benchmark the models. 
+
 ## Veridrop
+
+[Veridrop](https://github.com/canarybyte/veridrop) is an open-source tool for benchmarking AI API relays and checking whether they actually provide the model and capabilities they advertise.
+
+> [!WARNING]
+> A complete Veridrop test can consume around **2 million input tokens**, particularly when long-context verification is enabled. Run it only when you have enough API credits available.
+
+FreeModel's Claude relay received a score of **93/100 — Excellent**:
+
+* **Model:** `claude-opus-4-8`
+* **Test mode:** `full`
+* **Relay:** `https://api-cc.freemodel.dev`
+* **Brand:** `freemodel.dev`
+* **Actual endpoint:** `api-cc.freemodel.dev`
+
+[View the full Veridrop test report](https://veridrop.org/r/A7CcV2mb?from=share)
+
 [![Veridrop report](veridrop-A7CcV2mb.jpg)](https://veridrop.org/r/A7CcV2mb?from=share)
+
+## What do each of the 12 tests check?
+
+### Identity Consistency (Identity)
+
+The model is asked to identify itself. The response must contain “Claude” and “Anthropic” and cannot identify itself as another brand, such as Kiro or AWS Q.
+
+### Behavioral Signature Verification (Behavioral)
+
+Three behavioral fingerprint questions covering Markdown style, list preferences, and refusal tone. The genuine Claude has a distinctive response pattern.
+
+### Thinking Signature Verification (Thinking) ⭐
+
+Core detection: the encrypted `signature` bytes returned by the Claude thinking block cannot be forged by any relay provider.
+
+### Model Consistency (Consistency)
+
+Verifies that `response.model` matches the requested model and that the output length remains stable across multiple calls using the coefficient of variation, or CV.
+
+### Knowledge Accuracy (Knowledge)
+
+Five general-knowledge questions about Anthropic, including its CEO, headquarters, Constitutional AI, and more. Many incorrect answers indicate that the backend is not the real Claude.
+
+### PDF Document Recognition
+
+Submits a base64 PDF containing a magic string and checks whether the model can extract it correctly. Relay providers that strip multimodal content will fail.
+
+### Structured Output (Tool Use)
+
+Performs a real `tool_use` call and verifies five sub-items, including the `toolu_` ID prefix, JSON schema matching, and `stop_reason`.
+
+### Protocol Compliance (Protocol)
+
+The SSE event sequence and content block types must comply with Anthropic’s official specifications. This is passive detection and does not send additional requests.
+
+### Response Integrity (Integrity)
+
+The same prompt must return identical text, `input_tokens`, and `stop_reason` in both streaming and non-streaming calls.
+
+### Token Usage
+
+Checks whether `usage.input_tokens/output_tokens` exists in Claude Messages, whether the increase between short and long prompts is reasonable, and whether short outputs are not overreported. It also performs cross-validation using streaming and `count_tokens`.
+
+### Message ID Specification (Message ID)
+
+Message IDs must begin with `msg_`, and tool blocks must begin with `toolu_`. UUIDs or hardcoded values such as `tool_1` are typical signs of forgery.
+
+### Long-Context Authenticity (Long Context)
+
+This must be enabled when submitting the test. It uses needle-in-a-haystack probes at three levels — 32k → 100k → 200k tokens — to verify whether the relay provider truly delivers the advertised context window and to detect truncation or routing to a smaller-context model.
+
+The Anthropic path uses the official `count_tokens` endpoint for precise token budgeting. The extreme level can adaptively probe up to 950k+ tokens based on the model’s full limit. Fable 5, Opus 4.8, Sonnet 4.6, and Opus 4.6/4.7 all support 1M.
 
 ## Refer & Earn
 
